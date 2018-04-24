@@ -18,17 +18,17 @@ public class Encoder {
         int len = 0;
         //String input = "thefrogwasfrogthewas";
         int currentPos = 0;
-        Byte c,p;
+        char c,p;
         int i = 0;
 
         try
         {
-                InputStream input = System.in;
+            InputStream input = System.in;
+            len = input.read(buffer);
+            while (len != -1) {
+                //System.out.print(buffer);
                 len = input.read(buffer);
-                while (len != -1) {
-                    //System.out.print(buffer);
-                    len = input.read(buffer);
-                }
+            }
         }
 
         catch(Exception e)
@@ -37,12 +37,12 @@ public class Encoder {
         }
 
 
-        p = (buffer[currentPos]);
+        p = (char)(buffer[currentPos]);
 
         while (currentPos < byteArraySize-1)
         {
             currentPos++;
-            c = buffer[currentPos];
+            c = (char)(buffer[currentPos]);
 
 
             if (trie.Search(p+c) != -1)
@@ -60,4 +60,6 @@ public class Encoder {
         System.out.println();
 
     }
+
+
 }
