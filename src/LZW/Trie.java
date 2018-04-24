@@ -1,43 +1,37 @@
 package LZW;
+import java.lang.Character;
 
 public class Trie {
-    Byte[] dictionary;
+    char[] dictionary;
     int current;
 
     public Trie(int size)
     {
 
-        dictionary = new Byte[size];
+        dictionary = new char[size];
         current = 0;
     }
 
     public void Initialize()
     {
-        int i = 0;
-        for(int c = 0; c<256; c++)
+        for(int i=0;i<257;i++)
         {
-            Integer.toBinaryString(i) & 0b11111111;
-
-            String s = ""+(char)c.getBytes("UTF-8");
-            dictionary[i] = s.getBytes("UTF-8");
-            i++;
+            dictionary[i] = (char)i;
         }
-        current = i+1;
-        System.out.println("Current = " + current);
     }
 
 
     // Searches the dictionary for a
     // matching phrase
-    public int Search(Byte phrase) {
+    public int Search(char phrase) {
         if (dictionary.length == 0)
             return 0;
 
         for (int i = 0; i < dictionary.length; i++) {
-            if (dictionary[i] == null)
+            if (dictionary[i] == '\0')
                 break;
 
-            if (dictionary[i].compareTo(phrase) == 0)
+            if (dictionary[i] == phrase)
                 return i;
         }
 
@@ -45,13 +39,13 @@ public class Trie {
         return -1;
     }
 
-    public void insert(String item)
+    public void insert(char item)
     {
         dictionary[current] = item;
         current++;
     }
 
-    public String getIndex(int index)
+    public int getIndex(int index)
     {
         return dictionary[index];
     }
