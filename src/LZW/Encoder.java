@@ -10,6 +10,18 @@ public class Encoder {
 
     public static void main(String[] args)
     {
+        if(args.length != 1)
+        {
+            System.err.print("Usage: enter and integer to represent max number of bits");
+            return;
+        }
+        if(Integer.parseInt(args[0]) <= 8)
+        {
+            System.err.print("Value must be greater than 8");
+            return;
+        }
+        int maxSize = Integer.parseInt(args[0]);
+        maxSize = 2*maxSize;
         Tree[] root = new Tree[256];
         int currentPhrase = 0;
         for(int i = 0; i<256; i++)
@@ -18,12 +30,13 @@ public class Encoder {
             root[i].children = new ArrayList();
             currentPhrase = i;
         }
+        currentPhrase++;
 
         try
         {
             Tree curr = null;
             int read = 0;
-            read = System.in.read();
+                read = System.in.read();
             while(read != -1)
             {
             byte b = (byte)read;
@@ -33,19 +46,29 @@ public class Encoder {
                     i++;
                 }
             curr = root[i];
+            if(System.in.available() == 0)
+            {
+                System.out.print(curr.data);
+                return;
+            }
                     read = System.in.read();
                     b = (byte)read;
                     //search returning -1 when wa exists, maybe curr is wrong
-                    int search = curr.children.indexOf(b);
+                    int search = find(curr.children, b);
                     while(search != -1)
                     {
                         curr = (Tree)curr.children.get(search);
                         read = System.in.read();
                         b = (byte)read;
-                        search = curr.children.indexOf(b);
+                        search = find(curr.children,b);
                     }
                     System.out.println(curr.phrase);
                     Tree newNode = new Tree(currentPhrase, b);
+                    currentPhrase++;
+                    if(currentPhrase > maxSize)
+                    {
+                        //output reset symbol
+                    }
                     curr.children.add(newNode);
                 }
             System.out.print(read);
@@ -59,6 +82,23 @@ public class Encoder {
         {
             System.out.println(e);
         }
+
+    }
+
+    public static int find(ArrayList<Tree> list, byte b)
+    {
+        if(list == null)
+        {
+            return -1;
+        }
+        for(int i=0; i<list.size();i++)
+        {
+             if(list.get(i).data == b)
+             {
+                 return i;
+             }
+        }
+        return -1;
     }
 
 

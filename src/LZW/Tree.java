@@ -13,6 +13,7 @@ public class Tree {
     {
         this.phrase = p;
         this.data = d;
+        this.children = new ArrayList<Tree>();
     }
 }
 
