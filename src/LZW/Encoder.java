@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Encoder {
 
-
+    public static int maxSize = 9;
 
     public static void main(String[] args)
     {
@@ -20,22 +20,14 @@ public class Encoder {
             System.err.print("Value must be greater than 8");
             return;
         }
-        int maxSize = Integer.parseInt(args[0]);
-        maxSize = 2*maxSize;
-        Trie[] root = new Trie[256];
-        int currentPhrase = 0;
-        for(int i = 0; i<256; i++)
-        {
-            root[i] = new Trie(i, (byte)i);
-            root[i].children = new ArrayList();
-            currentPhrase = i;
-        }
-        currentPhrase++;
-
+        maxSize = Integer.parseInt(args[0]);
+        maxSize = (int)Math.pow((double)2,(double)maxSize);
+        Trie[] root = initialise(maxSize);
+        int currentPhrase = 257;
         try
         {
-            Trie curr = null;
-            int read = 0;
+            Trie curr;
+            int read;
             read = System.in.read();
             while(read != -1)
             {
@@ -53,7 +45,7 @@ public class Encoder {
                 }
                 read = System.in.read();
                 b = (byte)read;
-                //search returning -1 when wa exists, maybe curr is wrong
+
                 int search = find(curr.children, b);
                 while(search != -1)
                 {
@@ -67,15 +59,13 @@ public class Encoder {
                 currentPhrase++;
                 if(currentPhrase > maxSize)
                 {
-                    //output reset symbol
+                    System.out.println(root[0].phrase);
+                    root = initialise(maxSize);
+                    currentPhrase = 257;
                 }
                 curr.children.add(newNode);
             }
             System.out.print(read);
-
-
-
-
 
         }
         catch(Exception e)
@@ -99,6 +89,18 @@ public class Encoder {
             }
         }
         return -1;
+    }
+
+    public static Trie[] initialise(int max)
+    {
+        Trie[] root = new Trie[max];
+        root[0] = new Trie(0,(byte)0);
+        for(int i = 1; i<=256; i++)
+        {
+            root[i] = new Trie(i, (byte)(i-1));
+            root[i].children = new ArrayList();
+        }
+        return root;
     }
 
 

@@ -2,44 +2,47 @@ package LZW;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Stack;
+
+import static LZW.Encoder.maxSize;
 
 public class Decoder {
     public static void main(String[] args) {
-        Node[] dictionary = new Node[512];
-        int currentPhrase = 0;
-        for (int i = 0; i < 256; i++) {
-            dictionary[i] = new Node((byte)0,(char)i);
-            currentPhrase = i;
-        }
-        currentPhrase++;
+        maxSize = 512;
+        Node[] dictionary = initialise(maxSize);
+        int currentPhrase = 256;
         try {
-            Stack<Character> phraseBuilder = new Stack<>();
             InputStreamReader isRead = new InputStreamReader(System.in);
             BufferedReader br = new BufferedReader(isRead);
-            String in = br.readLine();
-            int prevPhrase = 0;
-            int phrase = Integer.parseInt(in);
-            printPhrase(dictionary, phrase);
-            while(in!=null)
-            {
-                in = br.readLine();
-                prevPhrase = phrase;
-                phrase = Integer.parseInt(in);
-                Node n = new Node(prevPhrase, getOldestParent(dictionary,phrase));
-               dictionary[currentPhrase] = n;
-               printPhrase(dictionary, phrase);
-               currentPhrase++;
-            }
-
-            /*while(phrase != -1)
-            {
-                dictionary[currentPhrase] = new Node(phrase, dictionary[phrase].data);
-                System.out.write((char)dictionary[phrase].data);
-                phrase = System.in.read();
+                String in = br.readLine();
+                int prevPhrase = 0;
+                int phrase = Integer.parseInt(in);
+                printPhrase(dictionary, phrase);
                 currentPhrase++;
-            }*/
+                while(in!=null)
+                {
+                    in = br.readLine();
+                    prevPhrase = phrase;
+                    phrase = Integer.parseInt(in);
+                    if(phrase!=0)
+                    {
+                        Node n = new Node(prevPhrase, getOldestParent(dictionary, phrase));
+                        dictionary[currentPhrase] = n;
+                        currentPhrase++;
+                        printPhrase(dictionary,phrase);
+                    }
+                    else
+                    {
+                        dictionary = initialise(maxSize);
+                        currentPhrase = 256;
+                        in = br.readLine();
+                        phrase = Integer.parseInt(in);
+                        printPhrase(dictionary, phrase);
+                        currentPhrase++;
+                    }
+                }
+                //dictionary = initialise(maxSize);
+                //currentPhrase = 257;
 
         }
         catch(Exception e)
@@ -50,6 +53,7 @@ public class Decoder {
 
     public static void printPhrase(Node[] array, int phraseNum)
     {
+        phraseNum = phraseNum;
         try
         {
             Stack<Character> fullPhrase = new Stack<>();
@@ -71,10 +75,24 @@ public class Decoder {
 
     public static char getOldestParent(Node[] array, int phraseNum)
     {
+        if(array[phraseNum] == null)
+        {
+            return '0';
+        }
         while(array[phraseNum].previous!=0)
         {
           phraseNum = array[phraseNum].previous;
         }
         return array[phraseNum].data;
+    }
+
+    public static Node[] initialise(int maxSize)
+    {
+        Node[] dictionary = new Node[maxSize];
+        dictionary[0] = new Node(0, (char)0);
+        for (int i = 1; i <= 256; i++) {
+            dictionary[i] = new Node((byte)0,(char)(i-1));
+        }
+        return dictionary;
     }
 }
