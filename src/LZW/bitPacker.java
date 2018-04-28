@@ -11,7 +11,7 @@ public class bitPacker {
         try {
             maxSize = 9;
             String eof = "eof";
-            Stack<Byte> byteStack = new Stack<Byte>();
+            //Stack<Byte> byteStack = new Stack<Byte>();
             InputStreamReader isRead = new InputStreamReader(System.in);
             BufferedReader br = new BufferedReader(isRead);
             String in = br.readLine();
@@ -28,7 +28,8 @@ public class bitPacker {
                 if(byteCount == 8)
                 {
                     for(int j = 0; j<=7; j++) {
-                        byteStack.push(buf[j]);
+                        //byteStack.push(buf[j]);
+                        System.out.print(buf[j]);
                     }
                     byteCount = 0;
                 }
@@ -39,29 +40,31 @@ public class bitPacker {
                     {
                         for(int m=0; m<byteCount;m++)
                         {
-                            byteStack.push(buf[m]);
+                            //byteStack.push(buf[m]);
+                            System.out.print(buf[m]);
                         }
-                        while(byteCount!=8)
+                        /*while(byteCount!=8)
                         {
-                            byteStack.push((byte)0);
+                            //byteStack.push((byte)0);
+                            System.out.print((byte)0);
                             byteCount++;
-                        }
+                        }*/
                         break;
                     }
                     value = Integer.parseInt(in);
                     i = 0;
                 }
             }
-            int k=0;
+            /*int k=0;
             while(byteStack.empty()!=true) {
                 System.out.print(byteStack.pop());
                 k++;
-                /*if(k == 9)
+                if(k == 9)
                 {
                     System.out.println("\n");
                     k=0;
-                }*/
-            }
+                }
+            }*/
 
 
         } catch (Exception e) {
