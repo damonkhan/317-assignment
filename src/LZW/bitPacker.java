@@ -9,7 +9,8 @@ import static LZW.Encoder.maxSize;
 public class bitPacker {
     public static void main(String[] args) {
         try {
-            maxSize = 9;
+            //use a stack to view binary numbers in a readable order, keep all stack lines commented if using bitUnpacker
+            //maxSize = 9;
             String eof = "eof";
             //Stack<Byte> byteStack = new Stack<Byte>();
             InputStreamReader isRead = new InputStreamReader(System.in);
@@ -21,10 +22,12 @@ public class bitPacker {
             int byteCount = 0;
             while((in.compareTo(eof)!=0))
             {
+                //get byte value by sing modulo 2 method
                 buf[byteCount] = (byte)(value%2);
                 byteCount++;
                 i++;
                 value = value/2;
+                //when we have a byte of data, output it
                 if(byteCount == 8)
                 {
                     for(int j = 0; j<=7; j++) {
@@ -33,7 +36,8 @@ public class bitPacker {
                     }
                     byteCount = 0;
                 }
-                if(i==9)
+                //when we have read max bits of our int, get next int
+                if(i==maxSize)
                 {
                     in = br.readLine();
                     if(in.compareTo(eof)==0)
@@ -43,6 +47,7 @@ public class bitPacker {
                             //byteStack.push(buf[m]);
                             System.out.print(buf[m]);
                         }
+                        //used to make binary numbers the right way, commented out for bitUnpacker
                         /*while(byteCount!=8)
                         {
                             //byteStack.push((byte)0);

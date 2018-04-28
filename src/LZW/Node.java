@@ -1,5 +1,6 @@
 package LZW;
 
+//data type for decoder, stores a value and a parent
 public class Node {
     int previous;
     char data;

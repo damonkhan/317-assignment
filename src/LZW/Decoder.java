@@ -24,15 +24,19 @@ public class Decoder {
                     in = br.readLine();
                     prevPhrase = phrase;
                     phrase = Integer.parseInt(in);
+                    //if not a reset symbol, create new Node
                     if(phrase!=0)
                     {
-                        Node n = new Node(prevPhrase, getOldestParent(dictionary, phrase));
+                        Node n = new Node(prevPhrase, getOldestParent(dictionary, phrase,prevPhrase));
+                        //add to our phrase dictionary
                         dictionary[currentPhrase] = n;
                         currentPhrase++;
+                        //print out the phrase
                         printPhrase(dictionary,phrase);
                     }
                     else
                     {
+                        //if reset symbol then reset array
                         dictionary = initialise(maxSize);
                         currentPhrase = 256;
                         in = br.readLine();
@@ -50,7 +54,7 @@ public class Decoder {
             System.out.print(e);
         }
     }
-
+    //uses a stack and prints out full phrase of any phrase number
     public static void printPhrase(Node[] array, int phraseNum)
     {
         phraseNum = phraseNum;
@@ -72,12 +76,16 @@ public class Decoder {
             System.err.println(e);
         }
     }
-
-    public static char getOldestParent(Node[] array, int phraseNum)
+    //gets the oldest parent of a phrase, it must be one of the original 255 byte values
+    public static char getOldestParent(Node[] array, int phraseNum, int prev)
     {
         if(array[phraseNum] == null)
         {
-            return '0';
+            while(array[prev].previous!=0)
+            {
+                prev = array[prev].previous;
+            }
+            return array[prev].data;
         }
         while(array[phraseNum].previous!=0)
         {
@@ -85,7 +93,7 @@ public class Decoder {
         }
         return array[phraseNum].data;
     }
-
+    //An array of Nodes to store our phrases
     public static Node[] initialise(int maxSize)
     {
         Node[] dictionary = new Node[maxSize];
