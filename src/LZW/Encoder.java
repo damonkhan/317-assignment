@@ -1,5 +1,8 @@
 package LZW;
 
+import com.sun.prism.shader.Solid_TextureSecondPassLCD_AlphaTest_Loader;
+
+import javax.swing.text.Style;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -41,6 +44,8 @@ public class Encoder {
                 if(System.in.available() == 0)
                 {
                     System.out.print(curr.data);
+                    System.out.println();
+                    System.out.print("eof");
                     return;
                 }
                 read = System.in.read();
